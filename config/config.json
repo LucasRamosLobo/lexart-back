@@ -1,6 +1,6 @@
 {
   "development": {
-    "url": "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require",
+    "url": "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
@@ -10,8 +10,7 @@
     }
   },
   "test": {
-    "url": "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require",
-    "dialect": "postgres",  
+    "url": "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb",    "dialect": "postgres",  
     "dialectOptions": {
       "ssl": {
         "require": true,
@@ -20,8 +19,7 @@
     }
   },
   "production": {
-    "url": "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require",
-    "dialect": "postgres",
+    "url": "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb",    "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
         "require": true,
