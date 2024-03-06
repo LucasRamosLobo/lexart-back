@@ -1,30 +1,16 @@
 {
   "development": {
     "url": "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb",
-    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": false
-      }
-    }
+    "dialect": "postgres"
+
   },
   "test": {
     "url": "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb",    "dialect": "postgres",  
-    "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": false
-      }
-    }
+
+    
   },
   "production": {
     "url": "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb",    "dialect": "postgres",
-    "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": false
-      }
-    }
+
   }
 }
