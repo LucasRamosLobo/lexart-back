@@ -9,7 +9,8 @@ async function registerUser(req, res) {
     res.status(201).json({ message: 'Usuário registrado com sucesso!' });
   } catch (error) {
     console.error('Erro no registro:', error);
-    res.status(500).json({ error: 'Erro interno no servidor' });
+    res.status(500).json({ error: 'Erro interno no servidor', details: error.message });
+
   }
 }
 
