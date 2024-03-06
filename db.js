@@ -1,13 +1,13 @@
 // src/db.js
 const { Sequelize } = require('sequelize');
 const config = require('./config/config');
-
+import * as pg from 'pg';
 
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 
 const sequelize = new Sequelize(dbConfig.url, {
-
+  dialectModule: pg,
   dialect: dbConfig.dialect,
   dialectOptions: dbConfig.dialectOptions,
 });
