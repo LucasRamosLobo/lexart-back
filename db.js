@@ -6,7 +6,7 @@ const config = require('./config/config');
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 
-const sequelize = new Sequelize(process.env.POSTGRES_URL, {
+const sequelize = new Sequelize(process.env.POSTGRES_URL || "postgres://default:92BpGqMdXVrv@ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require", {
 
   dialect: dbConfig.dialect,
   dialectOptions: dbConfig.dialectOptions,
