@@ -10,6 +10,7 @@ const sequelize = new Sequelize(dbConfig.url, {
   dialectModule: pg,
   dialect: dbConfig.dialect,
   dialectOptions: dbConfig.dialectOptions,
+  host: "ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech",
 });
 
 (async () => {
