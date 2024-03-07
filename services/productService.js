@@ -1,4 +1,4 @@
-const { Product, ProductDetail, ProductData } = require('../models');
+const { Product } = require('../models');
 
 async function getAllProducts() {
   return Product.findAll();
@@ -11,31 +11,7 @@ async function getProductById(id) {
 async function createProduct(name, brand, model, price, color) {
   let createdProduct;
 
-  if (brand && model && Array.isArray(price) && Array.isArray(color)) {
-    // Estrutura 3
-    const transaction = await sequelize.transaction();
-    
-    try {
-      createdProduct = await Product.create({
-        name,
-        brand,
-        model,
-      }, { transaction });
-
-      const productDataArray = price.map((p, index) => ({
-        productId: createdProduct.id,
-        price: p,
-        color: color[index],
-      }));
-
-      await ProductData.bulkCreate(productDataArray, { transaction });
-
-      await transaction.commit();
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
-  } else if (brand && model && color) {
+  if (typeof brand === 'string' && typeof model === 'string' && typeof price === 'number' && typeof color === 'string') {
     // Estrutura 1
     createdProduct = await Product.create({
       name,
@@ -44,7 +20,7 @@ async function createProduct(name, brand, model, price, color) {
       price,
       color,
     });
-  } else if (brand && model && price && color === undefined) {
+  } else if (typeof brand === 'string' && typeof model === 'string' && typeof price === 'number' && typeof color === 'undefined') {
     // Estrutura 2
     createdProduct = await Product.create({
       name,
@@ -53,6 +29,17 @@ async function createProduct(name, brand, model, price, color) {
       price,
       color: brand.color || null,
     });
+  } else if (Array.isArray(brand) && Array.isArray(model) && Array.isArray(price) && Array.isArray(color)) {
+    // Estrutura 3
+    const productDataArray = price.map((p, index) => ({
+      name,
+      brand: brand[index],
+      model: model[index], 
+      price: p,
+      color: color[index],
+    }));
+
+    createdProduct = await Product.bulkCreate(productDataArray, { returning: true });
   } else {
     throw new Error('Estrutura de dados inválida');
   }
