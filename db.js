@@ -1,24 +1,17 @@
-// src/db.js
-const { Sequelize } = require('sequelize');
-const config = require('./config/config');
-import * as pg from 'pg';
+import pg from 'pg';
 
-const env = process.env.NODE_ENV || 'development';
-const dbConfig = config[env];
+const { Pool } = pg;
 
-const sequelize = new Sequelize(process.env.POSTGRES_URL + "?sslmode=require", {
-  dialectModule: pg,
-  dialect: dbConfig.dialect,
-  dialectOptions: dbConfig.dialectOptions,
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL + "?sslmode=require",
 });
 
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Conexão com o banco de dados estabelecida com sucesso.');
-  } catch (error) {
-    console.error('Erro ao conectar ao banco de dados:', error);
-  }
-})();
+pool.on('connect', () => {
+  console.log('Conexão com o banco de dados estabelecida com sucesso.');
+});
 
-module.exports = sequelize;
+pool.on('error', (err) => {
+  console.error('Erro na conexão com o banco de dados:', err);
+});
+
+module.exports = pool;
