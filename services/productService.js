@@ -9,42 +9,63 @@ async function getProductById(id) {
 }
 
 async function createProduct(name, brand, model, price, color, details, data) {
+  let createdProduct;
+
   if (details) {
     // Estrutura 2
     const { brand: detailBrand, model: detailModel, color: detailColor } = details;
-    return createSingleProduct(name, detailBrand, detailModel, price, detailColor, data);
+    createdProduct = await Product.create({
+      name,
+      brand: detailBrand || null,
+      model: detailModel || null,
+      price,
+      color: detailColor || null,
+    });
+
+    if (data) {
+      await createProductData(createdProduct.id, data);
+    }
   } else if (Array.isArray(data)) {
     // Estrutura 3
-    return createMultipleProducts(name, data);
+    const createdProducts = await createProductsFromArray(name, data);
+    return createdProducts;
   } else if (typeof brand === 'string' && typeof model === 'string' && typeof price === 'number' && typeof color === 'string') {
     // Estrutura 1
-    return createSingleProduct(name, brand, model, price, color, null);
+    createdProduct = await Product.create({
+      name,
+      brand,
+      model,
+      price,
+      color,
+    });
   } else {
     throw new Error('Estrutura de dados inválida');
-  }
-}
-
-async function createSingleProduct(name, brand, model, price, color, data) {
-  const createdProduct = await Product.create({
-    name,
-    brand: brand || null,
-    model: model || null,
-    price,
-    color: color || null,
-  });
-
-  if (data) {
-    await createProductData(createdProduct.id, name, data);
   }
 
   return createdProduct;
 }
 
-async function createMultipleProducts(name, dataArray) {
+async function createProductsFromArray(name, dataArray) {
+  
   const createdProducts = await Promise.all(
     dataArray.map(async (dataItem) => {
       const { brand, model, data } = dataItem;
-      return createSingleProduct(name, brand, model, null, null, data);
+      const createdProduct = await Product.create({
+        name,
+        brand: brand || null,
+        model: model || null,
+      });
+
+      if (data && Array.isArray(data)) {
+        await Promise.all(
+          data.map(async (dataItem) => {
+            const { price, color } = dataItem;
+            await createProductData(createdProduct.id, name, { price, color });
+          })
+        );
+      }
+
+      return createdProduct;
     })
   );
 
@@ -82,5 +103,6 @@ module.exports = {
   getProductById,
   createProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  createProductsFromArray
 };
