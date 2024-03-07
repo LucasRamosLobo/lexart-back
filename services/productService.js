@@ -1,5 +1,4 @@
-// services/productService.js
-const { Product } = require('../models/Product');
+const { Product } = require('../models');
 
 async function getAllProducts() {
   return Product.findAll();
@@ -31,6 +30,7 @@ async function deleteProduct(id) {
   }
 
   await product.destroy();
+  return { message: 'Produto apagado com sucesso', status: 200 };
 }
 
 module.exports = {
