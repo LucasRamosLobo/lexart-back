@@ -33,7 +33,7 @@ async function createProduct(req, res) {
 
     if (Array.isArray(req.body)) {
       // Estrutura 3
-      const createdProducts = await productService.createProductsFromArray(name, data);
+      const createdProducts = await productService.createProductsFromArray(name, req.body);
       res.status(201).json(createdProducts);
     } else if (details) {
       // Estrutura 2
