@@ -9,8 +9,8 @@ async function getProductById(id) {
   return Product.findByPk(id);
 }
 
-async function createProduct(data) {
-  return Product.create(data);
+async function createProduct(name, brand, model, price, color) {
+  return Product.create({ name, brand, model, price, color });
 }
 
 async function updateProduct(id, updatedData) {
