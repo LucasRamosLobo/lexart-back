@@ -34,23 +34,23 @@ async function createProductFromDetails(name, details, price) {
 }
 
 async function createProductsFromArray(productsArray) {
-  const createdProducts = [];
+  const createdProducts = await Promise.all(
+    productsArray.map(async (productData) => {
+      const { name, brand, model, data } = productData;
+      const createdProduct = await createProduct(name, brand, model, null, null);
 
-  for (const productData of productsArray) {
-    const { name, brand, model, data } = productData;
-    const createdProduct = await createProduct(name, brand, model, null, null);
+      if (data && Array.isArray(data)) {
+        await Promise.all(
+          data.map(async (dataItem) => {
+            const { price, color } = dataItem;
+            await createProductData(createdProduct.id, name, { price, color });
+          })
+        );
+      }
 
-    if (data && Array.isArray(data)) {
-      await Promise.all(
-        data.map(async (dataItem) => {
-          const { price, color } = dataItem;
-          await createProductData(createdProduct.id, name, { price, color });
-        })
-      );
-    }
-
-    createdProducts.push(createdProduct);
-  }
+      return Product.findByPk(createdProduct.id);
+    })
+  );
 
   return createdProducts;
 }
