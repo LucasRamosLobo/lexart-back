@@ -6,13 +6,22 @@ async function registerUser(username, password) {
 }
 
 async function loginUser(username, password) {
-  const user = await User.findOne({ where: { username } });
+  try {
+    console.log('Login attempt with username:', username);
 
-  if (!user || !user.comparePassword(password)) {
-    throw new Error('Credenciais inválidas');
+    const user = await User.findOne({ where: { username } });
+
+    if (!user) {
+      console.log('User not found');
+      throw new Error('Credenciais inválidas');
+    }
+
+    console.log('Login successful');
+    return user;
+  } catch (error) {
+    console.error('Erro no loginUser:', error);
+    throw error; 
   }
-
-  return user;
 }
 
 module.exports = {
