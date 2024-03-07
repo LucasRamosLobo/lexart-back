@@ -25,14 +25,14 @@ async function createProduct(name, brand, model, price, color, details, data) {
     if (data) {
       await createProductData(createdProduct.id, data);
     }
-  } else if (Array.isArray(brand) && Array.isArray(model) && Array.isArray(price) && Array.isArray(color)) {
+  } else if (Array.isArray(data)) {
     // Estrutura 3
-    const productDataArray = price.map((p, index) => ({
+    const productDataArray = data.map((dataItem) => ({
       name,
-      brand: brand[index] || null,
-      model: model[index] || null,
-      price: p,
-      color: color[index] || null,
+      brand: dataItem.brand || null,
+      model: dataItem.model || null,
+      price: dataItem.price,
+      color: dataItem.color || null,
     }));
 
     createdProduct = await Product.bulkCreate(productDataArray, { returning: true });
