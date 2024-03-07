@@ -31,7 +31,7 @@ async function createProduct(req, res) {
   try {
     const { name, brand, model, price, color, details, data } = req.body;
 
-    if (Array.isArray(data)) {
+    if (Array.isArray(req.body.data)) {
       const createdProducts = await productService.createProductsFromArray(name, data);
       res.status(201).json(createdProducts);
     } else {

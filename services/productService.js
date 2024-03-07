@@ -25,14 +25,14 @@ async function createProduct(name, brand, model, price, color, details, data) {
     if (data) {
       await createProductData(createdProduct.id, data);
     }
-  } else if (Array.isArray(data)) {
+  } else if (Array.isArray(brand) && Array.isArray(model) && Array.isArray(price) && Array.isArray(color)) {
     // Estrutura 3
-    const productDataArray = data.map((dataItem) => ({
+    const productDataArray = price.map((p, index) => ({
       name,
-      brand: dataItem.brand || null,
-      model: dataItem.model || null,
-      price: dataItem.price,
-      color: dataItem.color || null,
+      brand: brand[index] || null,
+      model: model[index] || null,
+      price: p,
+      color: color[index] || null,
     }));
 
     createdProduct = await Product.bulkCreate(productDataArray, { returning: true });
@@ -54,22 +54,16 @@ async function createProduct(name, brand, model, price, color, details, data) {
 
 async function createProductsFromArray(name, dataArray) {
   const createdProducts = await Promise.all(
-    dataArray.map(async (item) => {
-      const { name, brand, model, data } = item;
-
+    dataArray.map(async (dataItem) => {
+      const { brand, model, color, price } = dataItem;
       const createdProduct = await Product.create({
         name,
         brand: brand || null,
         model: model || null,
       });
 
-      if (data && Array.isArray(data)) {
-        await Promise.all(
-          data.map(async (dataItem) => {
-            const { price, color } = dataItem;
-            await createProductData(createdProduct.id, { price, color });
-          })
-        );
+      if (price && color) {
+        await createProductData(createdProduct.id, { price, color });
       }
 
       return createdProduct;
