@@ -31,7 +31,11 @@ async function createProduct(req, res) {
   try {
     const { name, brand, model, price, color, details } = req.body;
 
-    if (details) {
+    if (Array.isArray(req.body)) {
+      // Estrutura 3
+      const createdProducts = await productService.createProductsFromArray(name, data);
+      res.status(201).json(createdProducts);
+    } else if (details) {
       // Estrutura 2
       const product = await productService.createProductFromDetails(name, details, price);
       res.status(201).json(product);
@@ -45,7 +49,6 @@ async function createProduct(req, res) {
     res.status(500).json({ error: 'Erro interno no servidor' });
   }
 }
-
 async function updateProduct(req, res) {
   try {
     const { id } = req.params;
