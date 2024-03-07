@@ -82,6 +82,5 @@ module.exports = {
   getProductById,
   createProduct,
   updateProduct,
-  deleteProduct,
-  createProductsFromArray
+  deleteProduct
 };
