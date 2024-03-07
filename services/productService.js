@@ -8,18 +8,45 @@ async function getProductById(id) {
   return Product.findByPk(id);
 }
 
-async function createProduct(name, brand, model, price, color, details, data) {
-  if (Array.isArray(data)) {
-    // Estrutura 3: Array de produtos
-    const createdProducts = await Promise.all(data.map(dataItem => createProductFromArray(name, dataItem)));
-    return createdProducts;
-  } else if (details) {
-    // Estrutura 2: Detalhes incluídos
-    return createProductWithDetails(name, details, price);
+async function createProduct(name, brand, model, price, color) {
+  let createdProduct;
+
+  if (brand && model && color) {
+    // Estrutura 2
+    createdProduct = await Product.create({
+      name,
+      brand,
+      model,
+      price,
+      color,
+    });
+  } else if (Array.isArray(price) && Array.isArray(color)) {
+    // Estrutura 3
+    createdProduct = await Product.create({
+      name,
+      brand,
+      model,
+    });
+
+    const productDataArray = price.map((p, index) => ({
+      productId: createdProduct.id,
+      price: p,
+      color: color[index],
+    }));
+
+    await ProductData.bulkCreate(productDataArray);
   } else {
-    // Estrutura 1: Formato padrão
-    return createProductFromArray(name, { brand, model, color, price });
+    // Estrutura 1
+    createdProduct = await Product.create({
+      name,
+      brand: brand || null,
+      model: model || null,
+      price,
+      color: color || null,
+    });
   }
+
+  return createdProduct;
 }
 
 async function createProductFromArray(name, dataItem) {
