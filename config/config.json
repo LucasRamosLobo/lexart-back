@@ -1,5 +1,9 @@
 {
   "development": {
+    "username": "default",
+    "password": "92BpGqMdXVrv",
+    "database": "verceldb",
+    "host": "ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
@@ -9,7 +13,11 @@
     }
   },
   "test": {
-    "dialect": "postgres",  
+    "username": "default",
+    "password": "92BpGqMdXVrv",
+    "database": "verceldb",
+    "host": "ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech",
+    "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
         "require": true,
@@ -18,6 +26,10 @@
     }
   },
   "production": {
+    "username": "default",
+    "password": "92BpGqMdXVrv",
+    "database": "verceldb",
+    "host": "ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
