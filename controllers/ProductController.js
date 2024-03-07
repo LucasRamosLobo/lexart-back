@@ -29,9 +29,17 @@ async function getProductById(req, res) {
 
 async function createProduct(req, res) {
   try {
-    const { name, brand, model, price, color } = req.body;
-    const product = await productService.createProduct(name, brand, model, price, color);
-    res.status(201).json(product);
+    const { name, brand, model, price, color, details } = req.body;
+
+    if (details) {
+      // Estrutura 2
+      const product = await productService.createProductFromDetails(name, details, price);
+      res.status(201).json(product);
+    } else {
+      // Estrutura 1
+      const product = await productService.createProduct(name, brand, model, price, color);
+      res.status(201).json(product);
+    }
   } catch (error) {
     console.error('Erro ao criar produto:', error);
     res.status(500).json({ error: 'Erro interno no servidor' });

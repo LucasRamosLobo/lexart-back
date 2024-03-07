@@ -1,3 +1,4 @@
+// services/productService.js
 const { Product } = require('../models');
 
 async function getAllProducts() {
@@ -9,6 +10,11 @@ async function getProductById(id) {
 }
 
 async function createProduct(name, brand, model, price, color) {
+  return Product.create({ name, brand, model, price, color });
+}
+
+async function createProductFromDetails(name, details, price) {
+  const { brand, model, color } = details;
   return Product.create({ name, brand, model, price, color });
 }
 
@@ -37,6 +43,7 @@ module.exports = {
   getAllProducts,
   getProductById,
   createProduct,
+  createProductFromDetails,
   updateProduct,
   deleteProduct,
 };
