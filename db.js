@@ -9,6 +9,7 @@ const sequelize = new Sequelize(process.env.POSTGRES_URL, {
   dialect: dbConfig.dialect,
   dialectModule: pg, // Indica que estamos utilizando o pacote pg para a conexão
   dialectOptions: dbConfig.dialectOptions,
+  host: process.env.POSTGRES_HOST,
   define: {
     timestamps: false, // Desativar a criação automática de campos de timestamp
   },
