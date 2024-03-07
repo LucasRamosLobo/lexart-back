@@ -1,7 +1,7 @@
-// middlewares/authMiddleware.js
 const jwt = require('jsonwebtoken');
+const { User } = require('../models');
 
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
   const token = req.header('Authorization');
 
   if (!token) {
@@ -10,7 +10,17 @@ function authMiddleware(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, 'secretpassphrase');
-    req.userId = decoded.userId;
+
+    
+    const user = await User.findByPk(decoded.userId);
+
+    if (!user) {
+      return res.status(401).json({ error: 'Usuário não encontrado' });
+    }
+
+ 
+    req.user = user;
+
     next();
   } catch (error) {
     console.error('Erro na autenticação:', error);
