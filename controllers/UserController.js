@@ -6,14 +6,17 @@ async function registerUser(req, res) {
   try {
     const { username, password } = req.body;
     await userService.registerUser(username, password);
-    res.status(201).json({ message: 'Usuário registrado com sucesso!' });
+
+    // Gere o token JWT
+    const token = jwt.sign({ username }, 'secretpassphrase', { expiresIn: '1h' });
+
+    // Retorne o token no corpo da resposta
+    res.status(201).json({ message: 'Usuário registrado com sucesso!', token });
   } catch (error) {
     console.error('Erro no registro:', error);
     res.status(500).json({ error: 'Erro interno no servidor', details: error.message });
-
   }
 }
-
 async function loginUser(req, res) {
   try {
     const { username, password } = req.body;
