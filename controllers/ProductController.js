@@ -31,13 +31,10 @@ async function createProduct(req, res) {
   try {
     const { name, brand, model, price, color, details, data } = req.body;
 
-    if (Array.isArray(data)) {
-      const createdProducts = await productService.createProductsFromArray(name, data);
-      res.status(201).json(createdProducts);
-    } else {
+   
       const product = await productService.createProduct(name, brand, model, price, color, details, data);
       res.status(201).json(product);
-    }
+    
   } catch (error) {
     console.error('Erro ao criar produto:', error);
     res.status(500).json({ error: 'Erro interno no servidor' });
