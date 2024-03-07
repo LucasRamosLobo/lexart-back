@@ -40,11 +40,11 @@ async function getProductById(req, res) {
 
 async function createProduct(req, res) {
   try {
-    const { name, brand, model, price, color, details } = req.body;
+    const { name, brand, model, price, color, details, data } = req.body;
 
-    if (Array.isArray(req.body)) {
+    if (Array.isArray(data)) {
       // Estrutura 3
-      const createdProducts = await productService.createProductsFromArray(name, req.body);
+      const createdProducts = await productService.createProductsFromArray(data);
       res.status(201).json(createdProducts);
     } else if (details) {
       // Estrutura 2
