@@ -2,15 +2,12 @@
 const userService = require('../services/userService');
 const jwt = require('jsonwebtoken');
 
-async function registerUser(req, res) {
+async function registerUser(username, password) {
   try {
-    const { username, password } = req.body;
-    await userService.registerUser(username, password);
-    res.status(201).json({ message: 'Usuário registrado com sucesso!' });
+    return await User.create({ username, password });
   } catch (error) {
-    console.error('Erro no registro:', error);
-    res.status(500).json({ error: 'Erro interno no servidor', details: error.message });
-
+    console.error('Erro ao registrar usuário:', error);
+    throw error; // Rejeita o erro para que possa ser capturado no controlador
   }
 }
 
