@@ -1,6 +1,8 @@
 // controllers/UserController.js
 const userService = require('../services/userService');
 const jwt = require('jsonwebtoken');
+const { User } = require('../models/User');
+
 
 async function registerUser(username, password) {
   try {
