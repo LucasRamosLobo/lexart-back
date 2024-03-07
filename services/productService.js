@@ -46,19 +46,23 @@ async function createProduct(name, brand, model, price, color, details, data) {
 }
 
 async function createProductsFromArray(name, dataArray) {
+  console.log('passou aqui')
   const createdProducts = await Promise.all(
     dataArray.map(async (dataItem) => {
-      const { brand, model, color, price } = dataItem;
+      const { brand, model, data } = dataItem;
       const createdProduct = await Product.create({
         name,
         brand: brand || null,
         model: model || null,
-        price,
-        color: color || null,
       });
 
-      if (price && color) {
-        await createProductData(createdProduct.id, { price, color });
+      if (data && Array.isArray(data)) {
+        await Promise.all(
+          data.map(async (dataItem) => {
+            const { price, color } = dataItem;
+            await createProductData(createdProduct.id, name, { price, color });
+          })
+        );
       }
 
       return createdProduct;
@@ -68,9 +72,9 @@ async function createProductsFromArray(name, dataArray) {
   return createdProducts;
 }
 
-async function createProductData(productId, dataItem) {
+async function createProductData(productId, name, dataItem) {
   const { price, color } = dataItem;
-  return ProductData.create({ productId, price, color });
+  return ProductData.create({ productId, name, price, color });
 }
 
 async function updateProduct(id, updatedData) {
