@@ -1,5 +1,20 @@
 // services/productService.js
 const { Product } = require('../models');
+const Sequelize = require('sequelize');
+const { Op } = Sequelize;
+
+async function searchProducts(query) {
+  return Product.findAll({
+    where: {
+      [Op.or]: [
+        { name: { [Op.iLike]: `%${query}%` } },
+        { brand: { [Op.iLike]: `%${query}%` } },
+        { model: { [Op.iLike]: `%${query}%` } },
+        { color: { [Op.iLike]: `%${query}%` } },
+      ],
+    },
+  });
+}
 
 async function getAllProducts() {
   return Product.findAll();
@@ -77,4 +92,5 @@ module.exports = {
   createProductsFromArray,
   updateProduct,
   deleteProduct,
+  searchProducts,
 };

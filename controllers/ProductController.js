@@ -11,6 +11,18 @@ async function getAllProducts(req, res) {
   }
 }
 
+async function searchProducts(req, res) {
+  try {
+    const { query } = req.query;
+    const products = await productService.searchProducts(query);
+    res.json(products);
+  } catch (error) {
+    console.error('Erro ao pesquisar produtos:', error);
+    res.status(500).json({ error: 'Erro interno no servidor' });
+  }
+}
+
+
 async function getProductById(req, res) {
   try {
     const { id } = req.params;
@@ -88,4 +100,5 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  searchProducts,
 };
