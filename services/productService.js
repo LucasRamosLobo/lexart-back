@@ -6,13 +6,10 @@ const { Op } = Sequelize;
 async function searchProducts(query) {
   return Product.findAll({
     where: {
-      [Op.or]: [
-        { name: { [Op.iLike]: `%${query}%` } },
-        { brand: { [Op.iLike]: `%${query}%` } },
-        { model: { [Op.iLike]: `%${query}%` } },
-        { color: { [Op.iLike]: `%${query}%` } },
-      ],
-    },
+      name: {
+        [Op.iLike]: `%${query}%`
+      }
+    }
   });
 }
 
