@@ -1,36 +1,56 @@
-const { Product } = require('../models');
+const { Product, ProductDetail, ProductData } = require('../models');
 
-async function getAllProducts() {
-  return Product.findAll();
+async function createProduct(productData) {
+ 
+  if (Array.isArray(productData)) {
+   
+    const createdProducts = await Promise.all(productData.map(createProductFromArray));
+    return createdProducts;
+  } else if (productData.details) {
+    
+    return createProductWithDetails(productData);
+  } else {
+  
+    return createProductFromArray(productData);
+  }
 }
 
-async function getProductById(id) {
-  return Product.findByPk(id);
-}
+async function createProductFromArray(productData) {
+  const { name, brand, model, data, price, color } = productData;
+  
+  
+  const createdProduct = await Product.create({ name, brand, model });
 
-async function createProduct(name, brand, model, price, color) {
-  return Product.create({ name, brand, model, price, color });
-}
+  if (data) {
 
-async function updateProduct(id, updatedData) {
-  const product = await getProductById(id);
-
-  if (!product) {
-    throw new Error('Produto não encontrado');
+    await Promise.all(data.map(dataItem => createProductData(createdProduct.id, dataItem)));
+  } else {
+ 
+    await createProductData(createdProduct.id, { price, color });
   }
 
-  return product.update(updatedData);
+  return createdProduct;
 }
 
-async function deleteProduct(id) {
-  const product = await getProductById(id);
+async function createProductWithDetails(productData) {
+  const { name, details, price } = productData;
+  const { brand, model, color } = details;
 
-  if (!product) {
-    throw new Error('Produto não encontrado');
-  }
 
-  await product.destroy();
-  return { message: 'Produto apagado com sucesso', status: 200 };
+  const createdProduct = await Product.create({ name, brand, model });
+
+
+  await ProductDetail.create({ productId: createdProduct.id, color });
+
+ 
+  await createProductData(createdProduct.id, { price, color });
+
+  return createdProduct;
+}
+
+async function createProductData(productId, dataItem) {
+  const { price, color } = dataItem;
+  return ProductData.create({ productId, price, color });
 }
 
 module.exports = {
