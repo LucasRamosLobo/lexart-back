@@ -1,18 +1,11 @@
-// routes.js
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middlewares/authMiddleware'); // Você precisará criar esse middleware
-
+const authMiddleware = require('../middlewares/authMiddleware');
 const UserController = require('../controllers/UserController');
 const ProductController = require('../controllers/ProductController');
-
-// Rotas de Usuário
 router.post('/register', UserController.registerUser);
 router.post('/login', UserController.loginUser);
-
-// Rotas de Produto (protegidas por autenticação)
-router.use(authMiddleware); // Todas as rotas abaixo exigem autenticação
-
+router.use(authMiddleware);
 router.get('/products', ProductController.getAllProducts);
 router.get('/products/:id', ProductController.getProductById);
 router.post('/products', ProductController.createProduct);
