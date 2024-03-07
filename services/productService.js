@@ -11,8 +11,32 @@ async function getProductById(id) {
 async function createProduct(name, brand, model, price, color) {
   let createdProduct;
 
-  if (brand && model && color) {
-    // Estrutura 2
+  if (brand && model && Array.isArray(price) && Array.isArray(color)) {
+    // Estrutura 3
+    const transaction = await sequelize.transaction();
+    
+    try {
+      createdProduct = await Product.create({
+        name,
+        brand,
+        model,
+      }, { transaction });
+
+      const productDataArray = price.map((p, index) => ({
+        productId: createdProduct.id,
+        price: p,
+        color: color[index],
+      }));
+
+      await ProductData.bulkCreate(productDataArray, { transaction });
+
+      await transaction.commit();
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+  } else if (brand && model && color) {
+    // Estrutura 1
     createdProduct = await Product.create({
       name,
       brand,
@@ -20,30 +44,17 @@ async function createProduct(name, brand, model, price, color) {
       price,
       color,
     });
-  } else if (Array.isArray(price) && Array.isArray(color)) {
-    // Estrutura 3
+  } else if (brand && model && price && color === undefined) {
+    // Estrutura 2
     createdProduct = await Product.create({
       name,
       brand,
       model,
-    });
-
-    const productDataArray = price.map((p, index) => ({
-      productId: createdProduct.id,
-      price: p,
-      color: color[index],
-    }));
-
-    await ProductData.bulkCreate(productDataArray);
-  } else {
-    // Estrutura 1
-    createdProduct = await Product.create({
-      name,
-      brand: brand || null,
-      model: model || null,
       price,
-      color: color || null,
+      color: brand.color || null,
     });
+  } else {
+    throw new Error('Estrutura de dados inválida');
   }
 
   return createdProduct;
