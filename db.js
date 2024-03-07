@@ -6,11 +6,10 @@ import * as pg from 'pg';
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 
-const sequelize = new Sequelize(dbConfig.url, {
+const sequelize = new Sequelize(process.env.POSTGRES_URL + "?sslmode=require", {
   dialectModule: pg,
   dialect: dbConfig.dialect,
   dialectOptions: dbConfig.dialectOptions,
-  host: "ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech",
 });
 
 (async () => {
