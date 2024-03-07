@@ -1,5 +1,5 @@
 // services/productService.js
-const { Product } = require('../models/Product');
+const { Product } = require('../models');
 
 async function getAllProducts() {
   return Product.findAll();
