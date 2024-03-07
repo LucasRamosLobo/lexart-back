@@ -10,7 +10,7 @@ const sequelize = new Sequelize({
   username: process.env.USER,
   password: process.env.PASSWORD,
   host: process.env.HOST,
-  port: process.env.POSTGRES_PORT || 5432, // Defina a porta conforme necessário
+  port: process.env.POSTGRES_PORT || 7000,
   dialect: dbConfig.dialect,
   dialectModule: pg,
   dialectOptions: dbConfig.dialectOptions,
