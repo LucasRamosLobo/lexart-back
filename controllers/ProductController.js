@@ -13,7 +13,7 @@ async function getAllProducts(req, res) {
 
 async function searchProducts(req, res) {
   try {
-    const { term } = req.query;
+    const { term } = req.body;
     const products = await productService.searchProducts(term);
     res.json(products);
   } catch (error) {
