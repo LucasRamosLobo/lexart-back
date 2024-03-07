@@ -5,13 +5,17 @@ import config from './config/config';
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = config[env];
 
-const sequelize = new Sequelize(process.env.POSTGRES_URL, {
-  dialect: dbConfig.dialect,
-  dialectModule: pg, // Indica que estamos utilizando o pacote pg para a conexão
-  dialectOptions: dbConfig.dialectOptions,
+const sequelize = new Sequelize({
+  database: process.env.POSTGRES_DATABASE,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
   host: process.env.POSTGRES_HOST,
+  port: process.env.POSTGRES_PORT || 5432, // Defina a porta conforme necessário
+  dialect: dbConfig.dialect,
+  dialectModule: pg,
+  dialectOptions: dbConfig.dialectOptions,
   define: {
-    timestamps: false, // Desativar a criação automática de campos de timestamp
+    timestamps: false,
   },
 });
 
