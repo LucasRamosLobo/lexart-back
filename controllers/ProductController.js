@@ -13,8 +13,8 @@ async function getAllProducts(req, res) {
 
 async function searchProducts(req, res) {
   try {
-    const { query } = req.query;
-    const products = await productService.searchProducts(query);
+    const { term } = req.query;
+    const products = await productService.searchProducts(term);
     res.json(products);
   } catch (error) {
     console.error('Erro ao pesquisar produtos:', error);
