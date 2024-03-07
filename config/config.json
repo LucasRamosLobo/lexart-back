@@ -1,5 +1,6 @@
 {
   "development": {
+    "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
         "require": true,
@@ -8,6 +9,7 @@
     }
   },
   "test": {
+    "dialect": "postgres",  
     "dialectOptions": {
       "ssl": {
         "require": true,
@@ -16,6 +18,7 @@
     }
   },
   "production": {
+    "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
         "require": true,
