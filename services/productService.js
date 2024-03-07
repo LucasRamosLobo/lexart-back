@@ -54,16 +54,22 @@ async function createProduct(name, brand, model, price, color, details, data) {
 
 async function createProductsFromArray(name, dataArray) {
   const createdProducts = await Promise.all(
-    dataArray.map(async (dataItem) => {
-      const { brand, model, color, price } = dataItem;
+    dataArray.map(async (item) => {
+      const { name, brand, model, data } = item;
+
       const createdProduct = await Product.create({
         name,
         brand: brand || null,
         model: model || null,
       });
 
-      if (price && color) {
-        await createProductData(createdProduct.id, { price, color });
+      if (data && Array.isArray(data)) {
+        await Promise.all(
+          data.map(async (dataItem) => {
+            const { price, color } = dataItem;
+            await createProductData(createdProduct.id, { price, color });
+          })
+        );
       }
 
       return createdProduct;
