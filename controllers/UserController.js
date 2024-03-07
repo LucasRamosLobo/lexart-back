@@ -4,12 +4,24 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 
 
-async function registerUser(username, password) {
+async function registerUser(req, res) {
   try {
-    return await User.create({ username, password });
+    const { username, password } = req.body;
+
+    // Certifique-se de que a função `registerUser` do serviço está funcionando corretamente
+    await userService.registerUser(username, password);
+
+    // Consulta novamente o usuário recém-criado
+    const createdUser = await User.findOne({ where: { username } });
+
+    if (!createdUser) {
+      throw new Error('Erro ao criar o usuário');
+    }
+
+    res.status(201).json({ message: 'Usuário registrado com sucesso!', user: createdUser });
   } catch (error) {
-    console.error('Erro ao registrar usuário:', error);
-    throw error; // Rejeita o erro para que possa ser capturado no controlador
+    console.error('Erro no registro:', error);
+    res.status(500).json({ error: 'Erro interno no servidor', details: error.message });
   }
 }
 
