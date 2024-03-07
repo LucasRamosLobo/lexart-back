@@ -25,10 +25,17 @@ async function createProduct(name, brand, model, price, color, details, data) {
     if (data) {
       await createProductData(createdProduct.id, data);
     }
-  } else if (Array.isArray(data)) {
+  } else if (Array.isArray(brand) && Array.isArray(model) && Array.isArray(price) && Array.isArray(color)) {
     // Estrutura 3
-    const createdProducts = await createProductsFromArray(name, data);
-    return createdProducts;
+    const productDataArray = price.map((p, index) => ({
+      name,
+      brand: brand[index] || null,
+      model: model[index] || null,
+      price: p,
+      color: color[index] || null,
+    }));
+
+    createdProduct = await Product.bulkCreate(productDataArray, { returning: true });
   } else if (typeof brand === 'string' && typeof model === 'string' && typeof price === 'number' && typeof color === 'string') {
     // Estrutura 1
     createdProduct = await Product.create({
@@ -46,23 +53,17 @@ async function createProduct(name, brand, model, price, color, details, data) {
 }
 
 async function createProductsFromArray(name, dataArray) {
-  
   const createdProducts = await Promise.all(
     dataArray.map(async (dataItem) => {
-      const { brand, model, data } = dataItem;
+      const { brand, model, color, price } = dataItem;
       const createdProduct = await Product.create({
         name,
         brand: brand || null,
         model: model || null,
       });
 
-      if (data && Array.isArray(data)) {
-        await Promise.all(
-          data.map(async (dataItem) => {
-            const { price, color } = dataItem;
-            await createProductData(createdProduct.id, name, { price, color });
-          })
-        );
+      if (price && color) {
+        await createProductData(createdProduct.id, { price, color });
       }
 
       return createdProduct;
@@ -72,9 +73,9 @@ async function createProductsFromArray(name, dataArray) {
   return createdProducts;
 }
 
-async function createProductData(productId, name, dataItem) {
+async function createProductData(productId, dataItem) {
   const { price, color } = dataItem;
-  return ProductData.create({ productId, name, price, color });
+  return ProductData.create({ productId, price, color });
 }
 
 async function updateProduct(id, updatedData) {
