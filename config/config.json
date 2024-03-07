@@ -1,9 +1,6 @@
 {
   "development": {
-    "username": "default",
-    "password": "92BpGqMdXVrv",
-    "database": "verceldb",
-    "host": "ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech",
+    "url": "postgres://default:Z63aLdVPyONY@ep-wandering-hat-a4p1yj0n-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
@@ -13,11 +10,8 @@
     }
   },
   "test": {
-    "username": "default",
-    "password": "92BpGqMdXVrv",
-    "database": "verceldb",
-    "host": "ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech",
-    "dialect": "postgres",
+    "url": "postgres://default:Z63aLdVPyONY@ep-wandering-hat-a4p1yj0n-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require",
+    "dialect": "postgres",  
     "dialectOptions": {
       "ssl": {
         "require": true,
@@ -26,10 +20,7 @@
     }
   },
   "production": {
-    "username": "default",
-    "password": "92BpGqMdXVrv",
-    "database": "verceldb",
-    "host": "ep-white-butterfly-a435d8j5-pooler.us-east-1.aws.neon.tech",
+    "url": "postgres://default:Z63aLdVPyONY@ep-wandering-hat-a4p1yj0n-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
